@@ -1,22 +1,34 @@
 <?php
 session_start();
 
-$username_db ="admin";
-$password_db ="123";
+// Daftar user valid (tanpa database, sesuai modul 15)
+$users = [
+    'admin'  => 'admin123',
+    'salma'  => 'salma123',
+    'guru'   => 'guru123',
+];
 
-$username=$_POST['username'];
-$password=$_POST['password'];
+if (isset($_POST['submit'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-if($username==$username_db AND $password==$password_db)
-    {
-        $_SESSION['username'] = $username;
-        echo "USERNAME : ".$username."<br>";
-        echo "selmat datang <b>".$_SESSION['username']."</b> <br>";
-        echo " Menu navigasi anda <br>";
-        echo "<a href='hal1.php'>menu 1</a><br>";
-        echo "<a href='hal2.php'>menu 2</a><br>";
-        echo "<a href='hal3.php'>menu 3</a><br>";
+    // Cek apakah username ada dan password cocok
+    if (array_key_exists($username, $users) && $users[$username] === $password) {
+        // Login berhasil — simpan session
+        $_SESSION['namauser'] = $username;
+        $_SESSION['waktu_login'] = date('d-m-Y H:i:s');
+
+        // Redirect ke halaman biodata siswa
+        header("Location: tampil.php");
+        exit;
     } else {
-        echo "<b>USERNAME ATAU PASSWORD ANDA SALAH!";
+        // Login gagal — redirect kembali ke login dengan pesan error
+        header("Location: login.php?error=1");
+        exit;
     }
+} else {
+    // Akses langsung tanpa POST — redirect ke login
+    header("Location: login.php");
+    exit;
+}
 ?>

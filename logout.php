@@ -1,6 +1,11 @@
 <?php
 session_start();
 
-unset ($_SESSION['namauser']);
-echo "Anda Telah logout";
+// Hapus semua session (session_destroy)
+session_unset();
+session_destroy();
+
+// Redirect kembali ke halaman login
+header("Location: login.php");
+exit;
 ?>
